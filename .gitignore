@@ -24,5 +24,6 @@ dist-ssr
 
 #Safety
 .env
+*.env
 
 **/node_modules/
