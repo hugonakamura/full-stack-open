@@ -15,14 +15,11 @@ function App() {
       })
   }, [])
 
-  console.log('to passando por aqui ')
-
   function addNewPerson(event) {
     event.preventDefault()
-    console.log('add new person', newName, newNumber)
     const newPerson = {
       "name": newName,
-      "telephone": newNumber
+      "phone": newNumber
     }
     phonebookService.createPerson(newPerson)
       .then((response) => {

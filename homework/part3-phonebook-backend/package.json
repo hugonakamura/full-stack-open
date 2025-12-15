@@ -6,12 +6,16 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "shx rm -rf dist && cd ../part2-phonebook-frontend-homework && npm run build && shx cp -r dist ../part3-phonebook-backend"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1",
     "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "shx": "^0.4.0"
   }
 }
