@@ -45,7 +45,7 @@ app.get('/info', (request, response) => {
     })
 })
 
-app.get('/api/phonebook/:id', (request, response) => {
+app.get('/api/phonebook/:id', (request, response, next) => {
     const id = request.params.id
 
     Contact.findById(id).then(contact => {
@@ -55,6 +55,7 @@ app.get('/api/phonebook/:id', (request, response) => {
             response.status(404).end()
         }
     })
+        .catch(error => next(error))
 })
 
 app.put('/api/phonebook/:id', (request, response, next) => {
@@ -95,7 +96,7 @@ app.post('/api/phonebook', (request, response) => {
     })
 })
 
-app.delete('/api/phonebook/:id', (request, response) => {
+app.delete('/api/phonebook/:id', (request, response, next) => {
     const id = request.params.id
 
     Contact.findByIdAndDelete(id).then(result => {
