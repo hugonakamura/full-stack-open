@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
+const Contact = require('./models/contact')
 
 const app = express()
 
@@ -13,48 +14,67 @@ morgan.token('body', (req) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-let phonebook = [
-    {
-        name: "Hugo Nakamura",
-        phone: "11 39393993",
-        id: "1",
-    },
-    {
-        name: "Don Tod",
-        phone: "15 52398052",
-        id: "2",
-    },
-    {
-        name: "Pedro goat",
-        phone: "19 4893414123",
-        id: "3",
-    }
-]
+// let phonebook = [
+//     {
+//         name: "Hugo Nakamura",
+//         phone: "11 39393993",
+//         id: "1",
+//     },
+//     {
+//         name: "Don Tod",
+//         phone: "15 52398052",
+//         id: "2",
+//     },
+//     {
+//         name: "Pedro goat",
+//         phone: "19 4893414123",
+//         id: "3",
+//     }
+// ]
 
 app.get('/api/phonebook', (request, response) => {
-    response.json(phonebook)
+    Contact.find({}).then(contacts => {
+        response.json(contacts)
+    })
 });
 
 app.get('/info', (request, response) => {
-    const message = `Phonebook has info for ${phonebook.length} people`
-    response.send(message)
+    Contact.find({}).then(contacts => {
+        const message = `Phonebook has info for ${contacts.length} people`
+        response.send(message)
+    })
 })
 
 app.get('/api/phonebook/:id', (request, response) => {
     const id = request.params.id
 
-    const person = phonebook.find(person => person.id === id)
-
-    if (!person) {
-        response.status(404).end()
-    } else {
-        response.json(person)
-    }
+    Contact.findById(id).then(contact => {
+        if (contact) {
+            response.json(person)
+        } else {
+            response.status(404).end()
+        }
+    })
 })
 
-const generateId = () => {
-    return String(Math.floor(Math.random() * 999))
-}
+app.put('/api/phonebook/:id', (request, response, next) => {
+    const id = request.params.id
+    const { name, phone } = request.body
+
+    Note.findById(id).then(contact => {
+        if (!contact) {
+            return response.status(404).end()
+        }
+
+        contact.name = name
+        contact.phone = phone
+
+        return contact.save().then((updatedContact) => {
+            response.json(updatedContact)
+        })
+    })
+        .catch(error => next(error))
+})
 
 app.post('/api/phonebook', (request, response) => {
     const body = request.body
@@ -65,23 +85,36 @@ app.post('/api/phonebook', (request, response) => {
         })
     }
 
-    const person = {
+    const contact = new Contact({
         'name': body.name,
         'phone': body.phone || '',
-        'id': generateId()
-    }
+    })
 
-    phonebook = phonebook.concat(person)
-
-    response.json(person)
+    contact.save().then(savedContact => {
+        response.json(savedContact)
+    })
 })
 
 app.delete('/api/phonebook/:id', (request, response) => {
     const id = request.params.id
-    phonebook = phonebook.filter(person => person.id !== id)
 
-    response.status(204).end()
+    Contact.findByIdAndDelete(id).then(result => {
+        response.status(204).end()
+    })
+        .catch(error => next(error))
 })
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformated id' })
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT)

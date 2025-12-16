@@ -20,13 +20,16 @@ const contactSchema = new mongoose.Schema({
 const Contact = mongoose.model('Contact', contactSchema)
 
 if (process.argv.length === 5) {
-    const newContact = new Contact({
-        name: process.argv[3],
-        phone: process.argv[4]
+    const name = process.argv[3]
+    const phone = process.argv[4]
+
+    const contact = new Contact({
+        name,
+        phone,
     })
 
-    newContact.save().then(result => {
-        console.log(`added ${process.argv[3]} number ${process.argv[4]} to phonebook`)
+    contact.save().then(result => {
+        console.log(`added ${name} number ${phone} to phonebook`)
         mongoose.connection.close()
     })
 } else {
