@@ -12,7 +12,7 @@ const createPerson = newObject => {
 }
 
 const removePerson = (id) => {
-    const request = axios.delete(BASE_URL + '/' + id)
+    const request = axios.delete(BASE_URL + id)
     return request.then(response => response.data)
 }
 
