@@ -1,7 +1,7 @@
-function Contact({ person, deletePerson }) {
+function Contact({ contact, deleteContact }) {
     return (
         <li>
-            <p>{person.name} - {person.phone} - {person.id} <button onClick={() => { deletePerson(person.id) }}>Deletar</button></p>
+            <p>{contact.name} - {contact.phone} - {contact.id} <button onClick={() => { deleteContact(contact.id) }}>Deletar</button></p>
         </li>
     )
 }

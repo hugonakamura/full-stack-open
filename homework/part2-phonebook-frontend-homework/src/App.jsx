@@ -15,15 +15,14 @@ function App() {
       })
   }, [])
 
-  function addNewPerson(event) {
+  function addNewContact(event) {
     event.preventDefault()
-    const newPerson = {
+    const newContact = {
       "name": newName,
       "phone": newNumber
     }
-    phonebookService.createPerson(newPerson)
+    phonebookService.createContact(newContact)
       .then((response) => {
-        console.log(response.data)
         setPhonebookData(phonebookData.concat(response))
         setNewName('')
         setNewNumber('')
@@ -42,14 +41,14 @@ function App() {
     setNewFilter(event.target.value)
   }
 
-  function deletePerson(id) {
-    phonebookService.removePerson(id)
+  function deleteContact(id) {
+    phonebookService.removeContact(id)
       .then(() => {
-        setPhonebookData(phonebookData.filter(person => person.id !== id))
+        setPhonebookData(phonebookData.filter(contact => contact.id !== id))
       })
   }
 
-  const filteredPhoneData = phonebookData.filter((person) => person.name.includes(filter));
+  const filteredPhoneData = phonebookData.filter((contact) => contact.name.includes(filter));
 
   return (
     <>
@@ -57,7 +56,7 @@ function App() {
       <p>filtrar <input value={filter} onChange={handleFilterChange}></input></p>
       <ul>
         {
-          filteredPhoneData.map((person) => <Contact key={person.id} person={person} deletePerson={deletePerson}></Contact>)
+          filteredPhoneData.map((contact) => <Contact key={contact.id} contact={contact} deleteContact={deleteContact}></Contact>)
         }
       </ul >
 
@@ -69,7 +68,7 @@ function App() {
         <p>
           Telefone <input value={newNumber} onChange={handleNumberChange}></input>
         </p>
-        <button onClick={addNewPerson}>Adicionar</button>
+        <button onClick={addNewContact}>Adicionar</button>
       </form>
     </>
   )
