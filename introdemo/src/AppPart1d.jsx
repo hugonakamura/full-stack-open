@@ -10,7 +10,7 @@ const App = () => {
     setAll(allClicks.concat('L'))
     const updatedLeft = left + 1
     setLeft(updatedLeft)
-    setTotal(updatedLeft + right) 
+    setTotal(updatedLeft + right)
   }
 
   const handleRightClick = () => {

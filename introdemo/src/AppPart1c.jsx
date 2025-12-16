@@ -5,7 +5,7 @@ const App = () => {
 
   const increaseByOne = () => setCounter(counter + 1)
   const decreaseByOne = () => setCounter(counter - 1)
-  
+
   const setToZero = () => setCounter(0)
 
   const handleClick = () => {
@@ -22,11 +22,11 @@ const App = () => {
       <Button
         onClick={setToZero}
         text='zero'
-      />     
+      />
       <Button
         onClick={decreaseByOne}
         text='minus'
-      />        
+      />
     </div>
 
   )
