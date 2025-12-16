@@ -50,7 +50,7 @@ app.get('/api/phonebook/:id', (request, response) => {
 
     Contact.findById(id).then(contact => {
         if (contact) {
-            response.json(person)
+            response.json(contact)
         } else {
             response.status(404).end()
         }
