@@ -6,8 +6,8 @@ const getAll = () => {
     return request.then(response => response.data)
 }
 
-const createContact = newObject => {
-    const request = axios.post(BASE_URL, newObject)
+const createContact = newContact => {
+    const request = axios.post(BASE_URL, newContact)
     return request.then(response => response.data)
 }
 
@@ -16,8 +16,14 @@ const removeContact = (id) => {
     return request.then(response => response.data)
 }
 
+const updateContact = (contact, id) => {
+    const request = axios.put(BASE_URL + id, contact)
+    return request.then(response => response.data)
+}
+
 export default {
     getAll,
     createContact,
-    removeContact
+    removeContact,
+    updateContact,
 }

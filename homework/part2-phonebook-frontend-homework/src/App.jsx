@@ -21,12 +21,35 @@ function App() {
       "name": newName,
       "phone": newNumber
     }
-    phonebookService.createContact(newContact)
-      .then((response) => {
-        setPhonebookData(phonebookData.concat(response))
-        setNewName('')
-        setNewNumber('')
-      })
+
+    const existingContact = phonebookData.find(contact => contact.name === newName);
+
+    if (existingContact) {
+      const confirmUpdate = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )
+      if (confirmUpdate) {
+        phonebookService.updateContact(newContact, existingContact.id)
+          .then((response) => {
+            setPhonebookData(phonebookData.map(contact => contact.id !== existingContact.id ? contact : response))
+            resetForm()
+          })
+          .catch(error => {
+            console.error("Error updating contact", error)
+          })
+      }
+    } else {
+      phonebookService.createContact(newContact)
+        .then((response) => {
+          setPhonebookData(phonebookData.concat(response))
+          resetForm()
+        })
+    }
+  }
+
+  function resetForm() {
+    setNewName('')
+    setNewNumber('')
   }
 
   function handleNameChange(event) {

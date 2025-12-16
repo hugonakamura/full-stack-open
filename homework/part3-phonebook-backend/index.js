@@ -62,7 +62,7 @@ app.put('/api/phonebook/:id', (request, response, next) => {
     const id = request.params.id
     const { name, phone } = request.body
 
-    Note.findById(id).then(contact => {
+    Contact.findById(id).then(contact => {
         if (!contact) {
             return response.status(404).end()
         }
