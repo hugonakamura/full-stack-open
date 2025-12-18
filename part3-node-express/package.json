@@ -4,9 +4,9 @@
   "description": "node and express full stack open class",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js",
-    "test": "node --test",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development node --watch index.js",
+    "test": "NODE_ENV=test node --test",
     "lint": "eslint .",
     "build:ui": "shx rm -rf dist && cd ../introdemo && npm run build && shx cp -r dist ../part3-node-express",
     "deploy:full": "npm run build:ui && cd ../ && git add . && git commit -m uibuild && git push"
