@@ -6,7 +6,7 @@ notesRouter.get('/', async (request, response) => {
   response.json(notes)
 })
 
-notesRouter.get('/:id', async (request, response, next) => {
+notesRouter.get('/:id', async (request, response) => {
   const id = request.params.id
 
   const note = await Note.findById(id)
@@ -37,7 +37,7 @@ notesRouter.put('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-notesRouter.post('/', async (request, response, next) => {
+notesRouter.post('/', async (request, response) => {
   const body = request.body
 
   if (!body.content) {
@@ -56,15 +56,11 @@ notesRouter.post('/', async (request, response, next) => {
 })
 
 
-notesRouter.delete('/:id', (request, response, next) => {
+notesRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
-  console.log(id)
 
-  Note.findByIdAndDelete(id)
-    .then(() => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
+  await Note.findByIdAndDelete(id)
+  response.status(204).end()
 })
 
 module.exports = notesRouter
