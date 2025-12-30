@@ -69,6 +69,7 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
