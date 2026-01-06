@@ -46,9 +46,6 @@ const App = (props) => {
     }
   ]
 
-  const name = "HGN"
-  const age = 31
-
   return (
     <div>
       {courses.map(course =>

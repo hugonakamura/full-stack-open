@@ -8,10 +8,6 @@ const App = () => {
 
   const setToZero = () => setCounter(0)
 
-  const handleClick = () => {
-    console.log('clicked')
-  }
-
   return (
     <div>
       <Display counter={counter}></Display>
