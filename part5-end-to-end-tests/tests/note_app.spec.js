@@ -1,11 +1,10 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
-
-const URL = 'http://localhost:3001'
+const { loginWith, createNote } = require('./helper')
 
 describe('Note app', () => {
   beforeEach(async ({ page, request }) => {
-    await request.post('http://localhost:3001/api/testing/reset')
-    await request.post('http://localhost:3001/api/users', {
+    await request.post('/api/testing/reset')
+    await request.post('/api/users', {
       data: {
         name: 'Matti Luukkainen',
         username: 'mluukkai',
@@ -13,7 +12,7 @@ describe('Note app', () => {
       }
     })
 
-    await page.goto(URL)
+    await page.goto('/')
   })
 
   test('front page can be opened', async ({ page }) => {
@@ -34,18 +33,16 @@ describe('Note app', () => {
     // await textboxes[1].fill('salainen')
 
     // better: using getByLabel
-    await page.getByLabel('username').fill('mluukkai')
-    await page.getByLabel('password').fill('salainen')
-    await page.getByRole('button', { name: 'login' }).click()
+    // await page.getByLabel('username').fill('mluukkai')
+    // await page.getByLabel('password').fill('salainen')
+    // await page.getByRole('button', { name: 'login' }).click()
 
+    await loginWith(page, 'mluukkai', 'salainen')
     await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
   })
 
   test('login fails with wrong password', async ({ page }) => {
-    await page.getByRole('button', { name: 'login' }).click()
-    await page.getByLabel('username').fill('mluukkai')
-    await page.getByLabel('password').fill('wrong')
-    await page.getByRole('button', { name: 'login' }).click()
+    await loginWith(page, 'mluukkai', 'salaiwrongnen')
 
     const errorDiv = page.locator('.error')
     await expect(errorDiv).toContainText('wrong credentials')
@@ -57,29 +54,36 @@ describe('Note app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.getByRole('button', { name: 'login' }).click()
-      await page.getByLabel('username').fill('mluukkai')
-      await page.getByLabel('password').fill('salainen')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'mluukkai', 'salainen')
     })
 
     test('a new note can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'new note' }).click()
-      await page.getByRole('textbox').fill('a note created by playwright')
-      await page.getByRole('button', { name: 'save' }).click()
+      await createNote(page, 'a note created by playwright')
       await expect(page.getByText('a note created by playwright')).toBeVisible()
     })
 
-    describe('and a note exists', () => {
+    describe('and several notes exists', () => {
       beforeEach(async ({ page }) => {
-        await page.getByRole('button', { name: 'new note' }).click()
-        await page.getByRole('textbox').fill('another note by playwright')
-        await page.getByRole('button', { name: 'save' }).click()
+        await createNote(page, 'first note')
+        await createNote(page, 'second note')
+        await createNote(page, 'third note')
       })
 
       test('importance can be changed', async ({ page }) => {
-        await page.getByRole('button', { name: 'make not important' }).click()
+        await page
+          .getByText('first note')
+          .getByRole('button', { name: 'make not important' })
+          .click()
         await expect(page.getByText('make important')).toBeVisible()
+      })
+
+      test('one of those can be made nonimportant', async ({ page }) => {
+        const otherNoteText = page.getByText('second note')
+        const otherNoteElement = otherNoteText.locator('..')
+
+        await otherNoteElement
+          .getByRole('button', { name: 'make not important' }).click()
+        await expect(otherNoteElement.getByText('make important')).toBeVisible()
       })
     })
   })
