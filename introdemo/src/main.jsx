@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 
-import App from './Menu'
+import App from './AppPart2a'
 
 import './index.css'
 
