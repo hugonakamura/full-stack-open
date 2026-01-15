@@ -1,25 +1,12 @@
-import { useState } from 'react'
+import NoteForm from './components/NoteForm'
+import Notes from './components/Notes'
 
-function App({ store }) {
-  const handlePlusPress = () => {
-    store.dispatch({ type: 'INCREMENT' })
-  }
-
-  const handleMinusPress = () => {
-    store.dispatch({ type: 'DECREMENT' })
-  }
-
-  const handleResetPress = () => {
-    store.dispatch({ type: 'ZERO' })
-  }
-
+const App = () => {
   return (
-    <>
-      <button onClick={handlePlusPress}>plus</button>
-      <button onClick={handleMinusPress}>minus</button>
-      <button onClick={handleResetPress}>reset</button>
-      {store.getState()}
-    </>
+    <div>
+      <NoteForm />
+      <Notes />
+    </div>
   )
 }
 
