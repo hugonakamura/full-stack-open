@@ -1,18 +1,16 @@
 import { useState } from 'react'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function App({ store }) {
   const handlePlusPress = () => {
-    setCount(count + 1)
+    store.dispatch({ type: 'INCREMENT' })
   }
 
   const handleMinusPress = () => {
-    setCount(count - 1)
+    store.dispatch({ type: 'DECREMENT' })
   }
 
   const handleResetPress = () => {
-    setCount(0)
+    store.dispatch({ type: 'ZERO' })
   }
 
   return (
@@ -20,7 +18,7 @@ function App() {
       <button onClick={handlePlusPress}>plus</button>
       <button onClick={handleMinusPress}>minus</button>
       <button onClick={handleResetPress}>reset</button>
-      {count}
+      {store.getState()}
     </>
   )
 }

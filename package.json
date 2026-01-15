@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "deep-freeze": "^0.0.1",
+    "vitest": "^4.0.17"
+  }
+}
