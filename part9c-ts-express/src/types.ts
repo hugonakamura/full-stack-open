@@ -9,3 +9,9 @@ export interface DiaryEntry {
   visibility: Visibility;
   comment?: string;
 }
+
+// subset of a type using Pick
+// export type NonSensitiveDiaryEntry = Pick<DiaryEntry, 'id' | 'date' | 'weather' | 'visibility'>;
+
+// using Omit
+export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
