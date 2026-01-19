@@ -1,14 +1,30 @@
-import { useState } from 'react'
+import { useState, type JSX } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import ReactDOM from 'react-dom/client'
+
+interface WelcomeProps {
+  name: string;
+}
+
+const Welcome = (props: WelcomeProps): JSX.Element => {
+  return <h1>Hello, {props.name}</h1>;
+};
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <Welcome name="Sarah" />
+)
+
 function App() {
   const [count, setCount] = useState(0)
+  const userName = "HGN"
 
   return (
     <>
       <div>
+        <Welcome name={userName} />
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
